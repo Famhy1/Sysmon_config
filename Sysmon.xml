@@ -1,0 +1,777 @@
+<Sysmon schemaversion="4.90">
+    <HashAlgorithms>md5,sha256</HashAlgorithms>
+    <DnsLookup>False</DnsLookup>
+    <CheckRevocation>False</CheckRevocation>
+    <ArchiveDirectory>sysmon</ArchiveDirectory>  
+    <EventFiltering>
+    
+
+        <!--SYSMON EVENT ID 1 : Создание процессов [ProcessCreate]-->
+
+        <RuleGroup name="" groupRelation="or">
+            <ProcessCreate onmatch="exclude">
+                <!--Microsoft Windows-->
+                <CommandLine condition="begin with"> "C:\Windows\system32\wermgr.exe" "-queuereporting_svc" </CommandLine> <!--отчеты об ошибках Windows/телеметрия-->
+                <CommandLine condition="begin with">C:\Windows\system32\DllHost.exe /Processid</CommandLine> <!--Windows-->
+                <CommandLine condition="begin with">C:\Windows\system32\wbem\wmiprvse.exe -Embedding</CommandLine> <!--Хост-провайдер WMI-->
+                <CommandLine condition="begin with">C:\Windows\system32\wbem\wmiprvse.exe -secured -Embedding</CommandLine> <!--Хост-провайдер WMI-->
+                <CommandLine condition="is">C:\Windows\system32\wermgr.exe -upload</CommandLine> <!--отчеты об ошибках Windows/телеметрия-->
+                <CommandLine condition="is">C:\Windows\system32\SearchIndexer.exe /Embedding</CommandLine> <!--Поисковые индексы-->
+                <CommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</CommandLine> <!--отчеты об ошибках Windows/телеметрия-->
+                <CommandLine condition="is">\??\C:\Windows\system32\autochk.exe *</CommandLine> <!--Утилита автоматической проверки-->
+                <CommandLine condition="is">\SystemRoot\System32\smss.exe</CommandLine> <!--Запуск длиспетчера сеансов Windows-->
+                <CommandLine condition="is">C:\Windows\System32\RuntimeBroker.exe -Embedding</CommandLine> <!--разрешения для приложений-->
+                <Image condition="is">C:\Program Files (x86)\Common Files\microsoft shared\ink\TabTip32.exe</Image> <!--Сенсорная клавиатура и вспомогательная панель рукописного ввода-->
+                <Image condition="is">C:\Windows\System32\TokenBrokerCookies.exe</Image> <!-- помощник по единому входу для MicrosoftOnline.com-->
+                <Image condition="is">C:\Windows\System32\plasrv.exe</Image> <!--Журналы производительности и оповещения сервера DCOM-->
+                <Image condition="is">C:\Windows\System32\wifitask.exe</Image> <!--Фоновая задача беспроводной связи-->
+                <Image condition="is">C:\Windows\system32\CompatTelRunner.exe</Image> <!--Улучшение качества обслуживания клиентов-->
+                <Image condition="is">C:\Windows\system32\PrintIsolationHost.exe</Image> <!--Печатание-->
+                <Image condition="is">C:\Windows\system32\audiodg.exe</Image> <!--Запускается постоянно-->
+                <Image condition="is">C:\Windows\system32\conhost.exe</Image> <!--Главный процесс интерфейса командной строки-->
+                <Image condition="is">C:\Windows\system32\mobsync.exe</Image> <!--Синхронизация сетевых файлов-->
+                <Image condition="is">C:\Windows\system32\musNotification.exe</Image> <!--Обновление всплывающих окон-->
+                <Image condition="is">C:\Windows\system32\musNotificationUx.exe</Image> <!--Обновление всплывающих окон-->
+                <Image condition="is">C:\Windows\system32\powercfg.exe</Image> <!--Управление конфигурацией электропитания-->
+                <Image condition="is">C:\Windows\system32\sndVol.exe</Image> <!--Регулятор громкости-->
+                <Image condition="is">C:\Windows\system32\sppsvc.exe</Image> <!--Служба защиты программного обеспечения-->
+                <Image condition="is">C:\Windows\system32\wbem\WmiApSrv.exe</Image> <!--Хост-процесс адаптера производительности WMI-->
+                <ParentCommandLine condition="begin with">%%SystemRoot%%\system32\csrss.exe ObjectDirectory=\Windows</ParentCommandLine> <!--Срабатывает, когда программы используют командную оболочку, но не указывает, что вызвало это-->
+                <ParentCommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</ParentCommandLine> <!--отчеты об ошибках Windows/телеметрия-->
+                <CommandLine condition="is">C:\WINDOWS\system32\devicecensus.exe UserCxt</CommandLine> <!--Служба сообщающая об ошибках-->
+                <CommandLine condition="is">C:\Windows\System32\usocoreworker.exe -Embedding</CommandLine> <!--Служба обновлений -->
+                <ParentImage condition="is">C:\Windows\system32\SearchIndexer.exe</ParentImage> <!--Индиксация-->
+                <!--svchost-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k appmodel -s StateRepository</CommandLine> <!--Служба StateRepository отвечает, за  хранение информации о состоянии системы и предоставляет доступ к этим данным другим приложениям и службам.-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k appmodel -p -s camsvc</CommandLine> <!--Служба camsvc отвечает за работу камеры-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k appmodel -p -s tiledatamodelsvc</CommandLine> <!--Служба tiledatamodelsvc участвует в обновлении содержимого, отображаемого на плитках в меню "Пуск".-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k camera -s FrameServer</CommandLine> <!--FrameServer это компонент, используемый в операционной системе Windows для передачи видео- и аудиоданных между различными приложениями.-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k dcomlaunch -s LSM</CommandLine> <!--LSM отвечает за управление сеансами пользователей в операционной системе Windows. -->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k dcomlaunch -s PlugPlay</CommandLine> <!--Диспетчер Plug and Play (PnP) обеспечивает поддержку функций PnP в Windows-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k defragsvc</CommandLine> <!--Служба дефрагментации диска-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k devicesflow -s DevicesFlowUserSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k imgsvc</CommandLine> <!--Microsoft:The Windows Image Acquisition Service-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localService -s EventSystem</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localService -s bthserv</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k LocalService -p -s BthAvctpSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localService -s nsi</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localService -s w32Time</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceAndNoImpersonation</CommandLine> <!--Сетевые сервисы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceAndNoImpersonation -p</CommandLine> <!--Сетевые сервисы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted -s Dhcp</CommandLine> <!--Сетевые сервисы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted -s EventLog</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted -s TimeBrokerSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted -s WFDSConMgrSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted -s BTAGService</CommandLine>
+                <CommandLine condition="is">C:\Windows\System32\svchost.exe -k LocalSystemNetworkRestricted -p -s NcbService</CommandLine> <!--Брокер сетевых подключений-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted</CommandLine> <!--Сетевые сервисы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceAndNoImpersonation -s SensrSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceAndNoImpersonation -p -s SSDPSRV</CommandLine> <!--Windows SSDP-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNoNetwork</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -p -s WPDBusEnum</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -p -s fhsvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s DeviceAssociationService</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s NcbService</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s SensorService</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s TabletInputService</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s UmRdpService</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s WPDBusEnum</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -p -s NgcSvc</CommandLine> <!--Microsoft Passport-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceNetworkRestricted -p -s NgcCtnrSvc</CommandLine> <!--Контейнер Microsoft Passport-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localServiceAndNoImpersonation -s SCardSvr</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -p -s wuauserv</CommandLine>
+                <CommandLine condition="is">C:\Windows\System32\svchost.exe -k netsvcs -p -s SessionEnv</CommandLine> <!--Конфигурация удаленного рабочего стола-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted -s WdiSystemHost</CommandLine> <!--Узел диагностической системы-->
+                <CommandLine condition="is">C:\Windows\System32\svchost.exe -k localSystemNetworkRestricted -p -s WdiSystemHost</CommandLine> <!--Узел диагностической системы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</CommandLine> <!--Windows-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -p -s wlidsvc</CommandLine> <!--Помощник по входу в Windows Live-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -p -s ncaSvc</CommandLine> <!--Помощник по подключению к сети-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s BDESVC</CommandLine> <!--Шифрование диска BitLocker-->
+                <CommandLine condition="is">C:\Windows\System32\svchost.exe -k netsvcs -p -s BDESVC</CommandLine> <!--Шифрование диска BitLocker-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -p -s BITS</CommandLine> <!--Фоновая интеллектуальная передача файлов (BITS)-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s BITS</CommandLine> <!--Фоновая интеллектуальная передача файлов (BITS)-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s CertPropSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s DsmSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -p -s Appinfo</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s Gpsvc</CommandLine> <!--Групповые политики-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s ProfSvc</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s SENS</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s SessionEnv</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s Themes</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs -s Winmgmt</CommandLine> <!--Инструментарий управления Windows (WMI)-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -p -s DoSvc</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -s Dnscache</CommandLine> <!--кэширование DNS, другие виды использования-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -s LanmanWorkstation</CommandLine> <!--"Рабочая станция", используемая для подключений к файлообменнику SMB и RDP-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -s NlaSvc</CommandLine> <!--Информация о сетевом местоположении-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -s TermService</CommandLine> <!--Службы терминалов (RDP)-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkService -p</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkServiceNetworkRestricted</CommandLine> <!--Сетевые службы-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k rPCSS</CommandLine> <!--Службы Windows-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k secsvcs</CommandLine>
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k swprv</CommandLine> <!--Поставщик теневого копирования программного обеспечения-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k unistackSvcGroup</CommandLine> <!--Windows 10-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k utcsvc</CommandLine> <!--Службы Windows-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k wbioSvcGroup</CommandLine> <!--Службы Windows-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k werSvcGroup</CommandLine> <!--Сообщение об ошибке-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k wusvcs -p -s WaaSMedicSvc</CommandLine> <!--Обновление службы личения-->
+                <CommandLine condition="is">C:\Windows\System32\svchost.exe -k wsappx -p -s ClipSVC</CommandLine> <!--Служба клиентских лицензий-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -p -s AppXSvc</CommandLine> <!--Служба развертывания AppX-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -s ClipSVC</CommandLine> <!--Служба клиентских лицензий-->
+                <CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx</CommandLine>
+                <ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</ParentCommandLine> <!--запускает Consent.exe-->
+                <ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine> <!--Windows-->
+                <CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine> <!--Агент регистрации устройств Azure AD-->
+                <!--SECTION: Microsoft:Edge-->
+                <CommandLine condition="begin with">"C:\Program Files (x86)\Microsoft\Edge Dev\Application\msedge.exe" --type=</CommandLine>
+                <!--SECTION: Microsoft:dotNet-->
+                <CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</CommandLine> <!--Microsoft:DotNet-->
+                <CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Ngen.exe</CommandLine> <!--Microsoft:DotNet-->
+                <CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngentask.exe</CommandLine> <!--Microsoft:DotNet-->
+                <CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\ngentask.exe</CommandLine> <!--Microsoft:DotNet-->
+                <Image condition="is">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\mscorsvw.exe</Image> <!--Microsoft:DotNet-->
+                <Image condition="is">C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorsvw.exe</Image> <!--Microsoft:DotNet-->
+                <Image condition="is">C:\Windows\Microsoft.Net\Framework64\v3.0\WPF\PresentationFontCache.exe</Image> <!--Windows: Служба кэширования шрифтов-->
+                <ParentCommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngentask.exe</ParentCommandLine>
+                <ParentImage condition="is">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\mscorsvw.exe</ParentImage> <!--Microsoft:DotNet-->
+                <ParentImage condition="is">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngentask.exe</ParentImage> <!--Microsoft:DotNet-->
+                <ParentImage condition="is">C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorsvw.exe</ParentImage> <!--Microsoft:DotNet-->
+                <ParentImage condition="is">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngentask.exe</ParentImage> <!--Microsoft:DotNet:создает кучу ngen.exe процессов-->
+                <!--SECTION: Microsoft:Office-->
+                <Image condition="is">C:\Program Files\Microsoft Office\Office16\MSOSYNC.EXE</Image> <!--Microsoft:Office: Фоновый процесс подключения к SharePoint/Office 365-->
+                <Image condition="is">C:\Program Files (x86)\Microsoft Office\Office16\MSOSYNC.EXE</Image> <!--Microsoft:Office: Фоновый процесс подключения к SharePoint/Office 365-->
+                <Image condition="is">C:\Program Files\Common Files\Microsoft Shared\OfficeSoftwareProtectionPlatform\OSPPSVC.EXE</Image> <!--Microsoft:Office: Лицензионная служба-->
+                <Image condition="is">C:\Program Files\Microsoft Office\Office16\msoia.exe</Image> <!--Microsoft:Office: Сборщик телеметрии-->
+                <Image condition="is">C:\Program Files (x86)\Microsoft Office\root\Office16\officebackgroundtaskhandler.exe</Image>
+                <!--SECTION: Microsoft:Office:Click2Run-->
+                <Image condition="is">C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeC2RClient.exe</Image> <!--Microsoft:Office: Фоновый процесс-->
+                <ParentImage condition="is">C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeClickToRun.exe</ParentImage> <!--Microsoft:Office: Фоновый процесс-->
+                <ParentImage condition="is">C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeC2RClient.exe</ParentImage> <!--Microsoft:Office: Фоновый процесс-->
+                <!--SECTION: Windows: Media player-->
+                <Image condition="is">C:\Program Files\Windows Media Player\wmpnscfg.exe</Image> <!--Приложение для настройки службы общего доступа к сети Windows Media Player-->
+                <!--Yandex browser-->
+                <Image condition="contains">\AppData\Local\Yandex\YandexBrowser\Application\browser.exe</Image> <!--Yandex browser-->
+
+            </ProcessCreate>
+        </RuleGroup>
+
+
+        <!--SYSMON EVENT ID 2 : Изменения времяни создания файла [FileCreateTime]-->
+
+        <RuleGroup name="" groupRelation="or">
+            <FileCreateTime onmatch="include">
+                <Image name="T1099" condition="begin with">C:\Users</Image> <!--Просмотр отметок времени в каталогах пользователей -->
+                <TargetFilename name="T1099" condition="end with">.exe</TargetFilename> <!--Исполняемые файлы с задним числом-->
+                <Image name="T1099" condition="begin with">\Device\HarddiskVolumeShadowCopy</Image> <!--Здесь ничего не должно быть-->
+            </FileCreateTime>
+	    </RuleGroup>
+
+        <RuleGroup name="" groupRelation="or">
+            <FileCreateTime onmatch="exclude">
+                <Image condition="image">OneDrive.exe</Image> <!--OneDrive постоянно изменяет временные метки файлов-->
+                <Image condition="image">C:\Windows\system32\backgroundTaskHost.exe</Image>
+                <Image condition="contains">setup</Image> <!--Игнорировать настройки-->
+                <Image condition="contains">install</Image> <!--Игнорировать настройки-->
+                <Image condition="contains">Update\</Image> <!--Игнорировать настройки-->
+                <Image condition="end with">redist.exe</Image> <!--Игнорировать настройки-->
+                <Image condition="is">msiexec.exe</Image> <!--Игнорировать настройки-->
+                <Image condition="is">TrustedInstaller.exe</Image> <!--Игнорировать настройки-->
+                <TargetFilename condition="contains">\NVIDIA\NvBackend\ApplicationOntology\</TargetFilename> <!--NVIDIA GeForce Experience-->
+                <TargetFilename condition="contains">\Yandex\YandexBrowser\User Data\</TargetFilename> <!--Yandex browser tmp-->
+            </FileCreateTime>
+	    </RuleGroup>
+
+
+
+        <!--SYSMON EVENT ID 3 : Сетевые конекты [NetworkConnect]-->
+
+        <RuleGroup name="Network" groupRelation="or">
+            <NetworkConnect onmatch="include">
+
+                <!--Подозрительные инструменты Windows-->
+                <Image condition="image">at.exe</Image> <!--Удаленный планировщик задач-->
+                <Image condition="image">cmd.exe</Image> <!--Удаленная командная строка-->
+                <Image condition="image">driverquery.exe</Image> <!--Удаленное распознавание конфигурации системы, устаревших/уязвимых драйверов-->
+                <Image condition="image">dsquery.exe</Image> <!--Запроссы к Active Directory-->
+                <Image condition="image">java.exe</Image> <!--Отслеживание использования уязвимого приложения и его запуск из JAR-файлов.-->
+                <Image condition="image">javaw.exe</Image> <!--Отслеживание использования уязвимого приложения и его запуск из JAR-файлов.-->
+			    <Image condition="image">javaws.exe</Image> <!--Отслеживание использования уязвимого приложения и его запуск из JAR-файлов.-->
+                <Image condition="image">mmc.exe</Image> <!--MMC-->
+                <Image condition="image">nslookup.exe</Image> <!--Извлечение данных через DNS-->
+                <Image condition="image">powershell.exe</Image> <!--запуск powershell-->
+                <Image condition="image">powershell_ise.exe</Image> <!--запуск powershell-->
+                <Image condition="image">qprocess.exe</Image> <!--Отображает сведения о процессах-->
+                <Image condition="image">qwinsta.exe</Image> <!--Отображает сведения о сеансах-->
+                <Image condition="image">reg.exe</Image> <!--Удаленный реестре-->
+                <Image condition="image">regsvcs.exe</Image> <!--Программа установки служб .NET-->
+                <Image condition="image">regsvr32.exe</Image> <!--Регистрация или отмена регистрации библиотеки DLL в реестре-->
+                <Image condition="image">rundll32.exe</Image> <!--Подключение библиотек-->
+                <Image condition="image">rwinsta.exe</Image> <!--Сброс удаленного сеанса-->
+                <Image condition="image">sc.exe</Image> <!--Удаленное изменение параметров службы Windows-->
+                <Image condition="image">schtasks.exe</Image> <!--Интерфейс командной строки для выполнения локальных и удаленных задач-->
+                <Image condition="image">taskkill.exe</Image> <!--Удаленное убийство процессов-->
+                <Image condition="image">tasklist.exe</Image> <!--Удаленное убийство процессов-->
+                <Image condition="image">wmic.exe</Image> <!--Управления системой с помощью сценариев-->
+                <Image condition="image">wscript.exe</Image> <!--WindowsScriptingHost-->
+
+                <!--Сторонние инструменты-->
+                <Image condition="image">nc.exe</Image> <!--Современная версия netcat от Nmap-->
+                <Image condition="image">ncat.exe</Image> <!--Современная версия netcat от Nmap-->
+			    <Image condition="image">psexec.exe</Image> <!--Клиентская сторона PsExec-->
+                <Image condition="image">psexesvc.exe</Image> <!--Серверная сторона PsExec-->
+                <Image condition="image">tor.exe</Image> <!--Tor-->
+                <Image condition="image">vnc.exe</Image> <!-- VNC клиент-->
+                <Image condition="image">vncviewer.exe</Image> <!-- VNC клиент-->
+                <Image condition="image">vncservice.exe</Image> <!-- VNC сервер-->
+                <Image condition="image">winexesvc.exe</Image> <!--Исполняемый файл службы Winexe-->
+                <Image condition="image">nmap.exe</Image> <!--Nmap-->
+                <Image condition="image">psinfo.exe</Image> <!--Сбор информации о ПК-->
+
+                <!--Удаленный доступ--> 
+                <DestinationPort name="SSH" condition="is">22</DestinationPort> <!--SSH-->
+                <DestinationPort name="Telnet" condition="is">23</DestinationPort> <!--Telnet-->
+                <DestinationPort name="SMTP" condition="is">25</DestinationPort> <!--SMTP-->
+                <DestinationPort name="IMAP" condition="is">143</DestinationPort> <!--IMAP-->
+                <DestinationPort name="RDP" condition="is">3389</DestinationPort> <!--RDP-->
+                <DestinationPort name="VNC" condition="is">5800</DestinationPort> <!--VNC-->
+                <DestinationPort name="VNC" condition="is">5900</DestinationPort> <!--VNC-->
+                <DestinationPort name="Metasploit" condition="is">4444</DestinationPort>
+
+                <!--Прокси-->
+                <DestinationPort name="Proxy" condition="is">1080</DestinationPort> <!--Socks proxy port-->
+                <DestinationPort name="Proxy" condition="is">3128</DestinationPort> <!--Socks proxy port-->
+                <DestinationPort name="Proxy" condition="is">8080</DestinationPort> <!--Socks proxy port-->
+
+                <!--Тор-->
+                <DestinationPort name="Tor" condition="is">1723</DestinationPort> <!--Tor-->
+                <DestinationPort name="Tor" condition="is">9001</DestinationPort> <!--Tor-->
+                <DestinationPort name="Tor" condition="is">9030</DestinationPort> <!--Tor-->
+            </NetworkConnect>
+        </RuleGroup>
+
+
+        <RuleGroup name="" groupRelation="or">
+            <NetworkConnect onmatch="exclude">
+                <!--Microsoft-->
+                <Image condition="begin with">C:\ProgramData\Microsoft\Windows Defender\Platform\</Image>
+                <Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image> <!--Teams-->
+                <DestinationHostname condition="end with">.microsoft.com</DestinationHostname> <!--Update delivery-->
+                <DestinationHostname condition="end with">microsoft.com.akadns.net</DestinationHostname> <!--Update delivery-->
+                <DestinationHostname condition="end with">microsoft.com.nsatc.net</DestinationHostname> <!--Update delivery-->
+                <!--Известные адреса OCSP-->
+                <DestinationIp condition="is">23.4.43.27</DestinationIp> <!--Цифровой сертификат-->
+                <DestinationIp condition="is">72.21.91.29</DestinationIp> <!--Цифровой сертификат-->
+                <!--Loopback адреса-->
+                <DestinationIp condition="is">127.0.0.1</DestinationIp>
+                <DestinationIp condition="begin with">fe80:0:0:0</DestinationIp> 
+            </NetworkConnect>
+	    </RuleGroup>
+
+        <!--SYSMON EVENT ID 4 : ЗАРЕЗЕРВИРОВАНО ДЛЯ СООБЩЕНИЙ О СОСТОЯНИИ СЛУЖБЫ SYSMON-->
+
+        <!--SYSMON EVENT ID 5 : Завершение процессов [ProcessTerminate]-->
+        <RuleGroup name="" groupRelation="or">
+            <ProcessTerminate onmatch="include">
+                <Image condition="begin with">C:\Users</Image> <!--Завершение процесса пользовательскими двоичными файлами-->
+                <Image condition="begin with">\</Image> <!--Устройства и VSC не должны выполнять изменения-->
+            </ProcessTerminate>
+	    </RuleGroup>
+
+	    <RuleGroup name="" groupRelation="or">
+		    <ProcessTerminate onmatch="exclude">
+                <Image condition="contains">\AppData\Local\Yandex\YandexBrowser\Application\browser.exe</Image> <!--Yandex browser-->
+		    </ProcessTerminate>
+	    </RuleGroup>
+
+        <!--SYSMON EVENT ID 6 : ДРАЙВЕР, ЗАГРУЖЕННЫЙ В ЯДРО [DriverLoad] -->
+
+        <!--T1014-->
+
+        <RuleGroup name="" groupRelation="or">
+            <DriverLoad onmatch="exclude">
+                <Signature condition="contains">microsoft</Signature> <!--Исключить подписанные драйверы Microsoft-->
+                <Signature condition="contains">windows</Signature> <!--Исключить подписанные драйверы Microsoft-->
+                <Signature condition="begin with">Intel </Signature> <!--Исключить подписанные драйверы Intel-->
+            </DriverLoad>
+	    </RuleGroup>
+
+        <!--SYSMON EVENT ID 7 : DLL (IMAGE) ЗАГРУЖЕННАЯ ПРОЦЕССОМ [ImageLoad]-->
+        <!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1073 ] [ https://attack.mitre.org/wiki/Technique/T1038 ] [ https://attack.mitre.org/wiki/Technique/T1034 ] -->
+        
+
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Поменять exclude на include-->
+        <RuleGroup name="" groupRelation="or">
+            <ImageLoad onmatch="include">
+                <!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+            </ImageLoad>
+	    </RuleGroup>
+        
+        <!--SYSMON EVENT ID 8 : СОЗДАН УДАЛЕННЫЙ ПОТОК [CreateRemoteThread]-->
+        <!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1055 ]-->
+
+        <RuleGroup name="" groupRelation="or">
+            <CreateRemoteThread onmatch="exclude">
+                <SourceImage condition="is">C:\Windows\system32\wbem\WmiPrvSE.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\svchost.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\wininit.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\csrss.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\services.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\winlogon.exe</SourceImage>
+                <SourceImage condition="is">C:\Windows\system32\audiodg.exe</SourceImage>
+                <StartModule condition="is">C:\Windows\system32\kernel32.dll</StartModule>
+                <TargetImage condition="is">C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</TargetImage>
+            </CreateRemoteThread>
+        </RuleGroup>
+
+        <!--SYSMON EVENT ID 9 : НЕОБРАБОТАННЫЙ ДОСТУП К ДИСКУ [RawAccessRead]-->
+        <!--COMMENT:    [ https://attack.mitre.org/wiki/Technique/T1067 ]-->
+
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Поменять exclude на include-->
+        <RuleGroup name="" groupRelation="or">
+            <RawAccessRead onmatch="include">
+                <!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+
+            </RawAccessRead>
+        </RuleGroup>
+
+        <!--SYSMON EVENT ID 10 : INTER-PROCESS ACCESS [ProcessAccess]-->
+
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Тестовая конфмгурация!!!-->
+        <!--Поменять exclude на include-->
+        <RuleGroup name="" groupRelation="or">
+		<ProcessAccess onmatch="include">
+			<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+		</ProcessAccess>
+	</RuleGroup>
+
+        <!--SYSMON EVENT ID 11 : Создание фалйла [FileCreate]-->
+
+        
+        <RuleGroup name="" groupRelation="or">
+            <FileCreate onmatch="exclude">
+                <!--Microsoft-->
+                <Image condition="is">C:\Program Files (x86)\EMET 5.5\EMET_Service.exe</Image> <!--Microsoft:EMET: Записывает в C:\Windows\AppPatch\-->
+                <!--Windows-->
+                <Image condition="is">C:\Windows\system32\smss.exe</Image> <!--Подсистема диспетчера сеансов: Создает swapfile.sys,pagefile.sys,hiberfile.sys-->
+                <Image condition="is">C:\Windows\system32\CompatTelRunner.exe</Image> <!--Приложение для Windows 10, создающее тонны файлов кэша-->
+                <Image condition="is">\\?\C:\Windows\system32\wbem\WMIADAP.EXE</Image> <!--обновления производительности WMI-->
+                <Image condition="is">C:\Windows\system32\mobsync.exe</Image> <!--Синхронизация сетевых файлов-->
+                <TargetFilename condition="begin with">C:\Windows\system32\DriverStore\Temp\</TargetFilename> <!--Временные файлы с помощью DrvInst.exe-->
+                <TargetFilename condition="begin with">C:\Windows\system32\wbem\Performance\</TargetFilename> <!--Создана в webern с помощью WMIADAP.exe-->
+                <TargetFilename condition="begin with">C:\Windows\Installer\</TargetFilename> <!--Игнорировать кэширование файлов установщика MSI-->
+                <!--Windows:Updates-->
+                <TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename> <!--Обновления функций, содержащие множество файлов .exe и .sys-->
+                <Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image> <!--Windows update-->
+                
+
+                <!--CVE-->
+                <TargetFilename name="CVE-2023-36874" condition="contains">\ProgramData\Microsoft\Windows\WER\ReportArchive\</TargetFilename> <!--Исключаем лигетимное срабатывание на создание файлов в обычной структуре папок.-->
+
+
+            </FileCreate>
+        </RuleGroup>
+
+        <RuleGroup name="" groupRelation="or">
+		    <FileCreate onmatch="include">
+                <TargetFilename name="T1023" condition="contains">\Start Menu</TargetFilename> <!--Ссылки для запуска и изменение ярлыка-->
+                <TargetFilename name="T1165" condition="contains">\Startup\</TargetFilename> <!--Изменения в автоматически запускаемых файлах и ярлыках пользователя-->
+                <TargetFilename name="OutlookAttachment" condition="contains">\Content.Outlook\</TargetFilename> <!--Microsoft:Outlook: вложения-->
+                <TargetFilename name="Downloads" condition="contains">\Downloads\</TargetFilename> <!--Загруженные файлы. Не включает файлы "Запуска" в IE-->
+
+                <TargetFilename condition="end with">.bat</TargetFilename> <!--Batch cкрипты-->
+                <TargetFilename condition="end with">.chm</TargetFilename> <!--HTMLHelp-->
+                <TargetFilename condition="end with">.cmd</TargetFilename> <!--Командная строка-->
+                <TargetFilename condition="end with">.cmdline</TargetFilename> <!--Выполняется cvtres.exe-->
+                <TargetFilename name="T1176" condition="end with">.crx</TargetFilename> <!--Расширение Chrome-->
+                <TargetFilename condition="end with">.dmp</TargetFilename> <!--Дампы процессов-->
+                <TargetFilename condition="end with">.docm</TargetFilename> <!--Word с макросами-->
+                <TargetFilename condition="end with">.docx</TargetFilename> <!--Word с макросами-->
+                <TargetFilename name="DLL" condition="end with">.dll</TargetFilename> <!--Динамически подключаемая библиотека -->
+                <TargetFilename name="EXE" condition="end with">.exe</TargetFilename> <!--Выполняемый файл-->
+                <TargetFilename name="ProcessHostingdotNETCode" condition="end with">.exe.log</TargetFilename> <!--Обход логирования powershell [https://github.com/bitsadmin/nopowershell]-->
+                <TargetFilename condition="end with">.jar</TargetFilename> <!--Java-->
+                <TargetFilename condition="end with">.jnlp</TargetFilename> <!--Java-->
+                <TargetFilename condition="end with">.hta</TargetFilename> <!--HTML Application-->
+                <TargetFilename condition="end with">.job</TargetFilename> <!--Запланированная задача-->
+                <TargetFilename condition="end with">.pptm</TargetFilename> <!--Word макросы-->
+                <TargetFilename condition="end with">.ps1</TargetFilename> <!--PowerShell-->
+                <TargetFilename condition="end with">.sct</TargetFilename> <!--Скрипты Components Services-->
+                <TargetFilename condition="end with">.sys</TargetFilename> <!--Файлы системных драйверов-->
+                <TargetFilename condition="end with">.scr</TargetFilename> <!--Файлы системных драйверов-->
+                <TargetFilename condition="end with">.vbe</TargetFilename> <!--VisualBasicScripting-->
+                <TargetFilename condition="end with">.vbs</TargetFilename> <!--VisualBasicScripting-->
+                <TargetFilename condition="end with">.xlsm</TargetFilename> <!--Exsel Макросы-->
+                <TargetFilename condition="end with">.ocx</TargetFilename> <!--Управления ActiveX-->
+                <TargetFilename condition="end with">.sln</TargetFilename><!-- Visual Studio-->
+
+                <TargetFilename name="DefaultUserModified" condition="begin with">C:\Users\Default</TargetFilename> <!--Изменения в профиле пользователя по умолчанию-->
+                <TargetFilename condition="begin with">C:\Windows\system32\Drivers</TargetFilename> <!--Каталог хранения драйверов-->
+                <TargetFilename condition="begin with">C:\Windows\SysWOW64\Drivers</TargetFilename> <!--Каталог хранения драйверов-->
+                <TargetFilename name="T1037,T1484" condition="begin with">C:\Windows\system32\GroupPolicy\Machine\Scripts</TargetFilename> <!--GPO-->
+                <TargetFilename name="T1037,T1484" condition="begin with">C:\Windows\system32\GroupPolicy\User\Scripts</TargetFilename> <!--GPO-->
+                <TargetFilename condition="begin with">C:\Windows\system32\WindowsPowerShell</TargetFilename> <!--Каталог powershell-->
+                <TargetFilename condition="begin with">C:\Windows\SysWOW64\WindowsPowerShell</TargetFilename> <!--Каталог powershell-->
+                <TargetFilename name="T1053" condition="begin with">C:\Windows\Tasks\</TargetFilename> <!--Планировщик задач-->
+                <TargetFilename name="T1053" condition="begin with">C:\Windows\system32\Tasks</TargetFilename> <!--Планировщик задач-->
+                <TargetFilename name="T1053" condition="begin with">C:\Windows\SysWOW64\Tasks</TargetFilename> <!--Планировщик задач-->
+                <Image condition="begin with">\Device\HarddiskVolumeShadowCopy</Image> <!--Ничто не должно выполняться из VSC-->
+
+                <!--Уязвимые файлы-->
+                <TargetFilename condition="end with">.xls</TargetFilename> <!--Устаревшие файлы Office часто используются для атак-->
+                <TargetFilename condition="end with">.ppt</TargetFilename> <!--Устаревшие файлы Office часто используются для атак-->
+                <TargetFilename condition="end with">.rtf</TargetFilename> <!--Файлы RTF часто являются переносчиками вредоносных программ 0day при открытии Office-->
+
+                <!--CVE-->
+
+                <TargetFilename name="CVE-2023-36874" condition="end with">.wer</TargetFilename> <!--Обнаружено создание файла "*.wer" в необычной структуре папок. Это может быть признаком потенциального использования CVE-2023-36874-->
+
+
+            </FileCreate>
+	    </RuleGroup>
+
+        
+
+        <!--SYSMON EVENT ID 12 & 13 & 14 : ИЗМЕНЕНИЕ РЕЕСТРА [RegistryEvent]-->
+        <!--NOTE:	[ https://attack.mitre.org/wiki/Technique/T1112 ] -->
+
+        <RuleGroup name="" groupRelation="or">
+		    <RegistryEvent onmatch="include">
+			<!--Автозапуск-->
+			
+                <TargetObject name="T1060,RunKey" condition="contains">CurrentVersion\Run</TargetObject> <!--Подстановочный знак для ключей запуска, включая RunOnce, RunOnceEx, RunServices, RunServicesOnce [Также распространяется на сервер терминалов]-->
+                <TargetObject name="T1060,RunPolicy" condition="contains">Policies\Explorer\Run</TargetObject> <!--ключи для альтернативного запуска-->
+                <TargetObject name="T1484" condition="contains">Group Policy\Scripts</TargetObject> <!--сценарии групповой политики-->
+                <TargetObject name="T1484" condition="contains">Windows\System\Scripts</TargetObject> <!--Подстановочный знак для входа в систему, выхода из системы, завершения работы-->
+                <TargetObject name="T1060" condition="contains">CurrentVersion\Windows\Load</TargetObject> <!--программы запускаемые до входа пользователя в систему: -->
+                <TargetObject name="T1060" condition="contains">CurrentVersion\Windows\Run</TargetObject> <!--- программы запускаемые после входа пользователя в систему. -->
+                <TargetObject name="T1060" condition="contains">CurrentVersion\Winlogon\Shell</TargetObject> <!--программа запускается с пользовательской родительской оболочкой-->
+                <TargetObject name="T1060" condition="contains">CurrentVersion\Winlogon\System</TargetObject> <!--определяет программы, которые будут запускаться с правами системы процессом WINLOGON.EXE при инициализации.-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify</TargetObject> <!--Расположение автозапуска [ https://attack.mitre.org/wiki/Technique/T1004 ] -->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell</TargetObject> <!--программа запускается с пользовательской родительской оболочкой-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit</TargetObject> <!--указывает программы, которые будут запускаться с правами пользователя при его регистрации процессом WINLOGON.EXE.-->
+                <TargetObject condition="begin with">HKLM\Software\WOW6432Node\Microsoft\Windows NT\CurrentVersion\Drivers32</TargetObject> <!--загрузка устаревшего драйвера-->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\BootExecute</TargetObject> <!--Автозагрузка-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\AeDebug</TargetObject> <!-- Программа автоматической отладки сбоя программы-->
+                <TargetObject condition="contains">UserInitMprLogonScript</TargetObject> <!--Устаревшая переменная среды сценария входа в систему-->
+                <TargetObject name="T1112,ChangeStartupFolderPath" condition="end with">user shell folders\startup</TargetObject> <!--Отслеживайте изменения в расположении папки автозагрузки для отслеживания уклонения-->
+
+                <!--Службы-->
+                <TargetObject name="T1031,T1050" condition="end with">\ServiceDll</TargetObject> <!--Указывает на библиотеку DLL службы-->
+                <TargetObject name="T1031,T1050" condition="end with">\ServiceManifest</TargetObject> <!--Манифест, указывающий на библиотеку DLL службы-->
+                <TargetObject name="T1031,T1050" condition="end with">\ImagePath</TargetObject> <!--Указывает на исполняемый файл службы [ https://attack.mitre.org/wiki/Technique/T1050 ] -->
+                <TargetObject name="T1031,T1050" condition="end with">\Start</TargetObject> <!--Изменение режима запуска служб (отключено, автоматически, вручную)-->
+
+                <!--RDP-->
+                <TargetObject name="RDP port change" condition="end with">Control\Terminal Server\WinStations\RDP-Tcp\PortNumber</TargetObject> <!--изменение порта RDP-->
+                <TargetObject name="RDP port change" condition="end with">Control\Terminal Server\fSingleSessionPerUser</TargetObject> <!--Разрешает одному и тому же пользователю иметь несколько сеансов RDP, чтобы скрыть от администратора олицетворение-->
+                <TargetObject name="ModifyRemoteDesktopState" condition="end with">fDenyTSConnections</TargetObject> <!--Злоумышленник включает RDP-->
+                <TargetObject condition="end with">LastLoggedOnUser</TargetObject> <!--Изменение последнего вошедшего в систему пользователя-->
+                <TargetObject name="ModifyRemoteDesktopPort" condition="end with">RDP-tcp\PortNumber</TargetObject> <!--Изменение порта RDP для обхода идентификаторов IDS-->
+                <TargetObject condition="end with">Services\PortProxy\v4tov4</TargetObject> <!--Изменение порта RDP для обхода идентификаторов IDS-->
+
+                <!--Команды запуска CLSID и изменения ассоциации файлов по умолчанию-->
+                <TargetObject name="T1042" condition="contains">\command\</TargetObject> <!--Чувствительный дополнительный ключ в разделе ассоциации файлов и CLSID, который сопоставляется с командой запуска-->
+                <TargetObject name="T1122" condition="contains">\ddeexec\</TargetObject> <!--Чувствительный дополнительный ключ в разделе ассоциации файлов и CLSID, который сопоставляется с командой запуска-->
+                <TargetObject name="T1122" condition="contains">{86C86720-42A0-1069-A2E8-08002B30309D}</TargetObject> <!--обработчик всплывающих подсказок-->
+                <TargetObject name="T1042" condition="contains">exefile</TargetObject> <!--Обработчик исполняемого файла Windows для регистрации любых изменений, которые еще не отслеживались-->
+
+                <!--Windows COM-->
+                <TargetObject name="T1122" condition="end with">\InprocServer32\(Default)</TargetObject> <!--Захват COM-объекта-->
+                
+                <!--Визуальные модификации оболочки Windows, используемые вредоносными программами-->
+                <TargetObject name="T1158" condition="end with">\Hidden</TargetObject> <!--Некоторые типы вредоносных программ пытаются скрыть свои скрытые системные файлы от пользователя, что является хорошим сигналом.-->
+                <TargetObject name="T1158" condition="end with">\ShowSuperHidden</TargetObject> <!--: Некоторые типы вредоносных программ пытаются скрыть свои скрытые системные файлы от пользователя-->
+                <TargetObject name="T1158" condition="end with">\HideFileExt</TargetObject> <!--Некоторые вредоносные программы скрывают расширения файлов, чтобы затруднить диагностику / дезинфекцию для начинающих пользователей-->
+                
+                <!--Захват оболочки Windows и модификация-->
+                <TargetObject condition="contains">Classes\*\</TargetObject> <!--Проводник-->
+                <TargetObject condition="contains">Classes\AllFilesystemObjects\</TargetObject> <!--Проводник-->
+                <TargetObject condition="contains">Classes\Directory\</TargetObject> <!--Проводник-->
+                <TargetObject condition="contains">Classes\Drive\</TargetObject> <!--Проводник-->
+                <TargetObject condition="contains">Classes\Folder\</TargetObject> <!--Проводник-->
+                <TargetObject condition="contains">Classes\PROTOCOLS\</TargetObject> <!--Обработчики протоколов-->
+                <TargetObject condition="contains">ContextMenuHandlers\</TargetObject> 
+                <TargetObject condition="contains">CurrentVersion\Shell</TargetObject> <!--Папки оболочки, ShellExecuteHooks, Shelliconoverlayidentifiers, ShellServiceObjects, ShellServiceObjectDelayLoad-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\explorer\ShellExecuteHooks</TargetObject> <!--ShellExecuteHooks-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\explorer\ShellServiceObjectDelayLoad</TargetObject> <!--ShellExecuteHooks-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\explorer\ShellIconOverlayIdentifiers</TargetObject> <!--ShellExecuteHooks-->
+                
+                <!--Перехват путей к приложениям-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\App Paths\</TargetObject> <!--[ http://www.hexacorn.com/blog/2013/01/19/beyond-good-ol-run-key-part-3/ ] -->
+                
+                <!--Ловушка для терминальной службы-->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\InitialProgram</TargetObject> <!--Обратите внимание, что другие ключи запуска сервера терминалов уже обрабатываются другим подстановочным знаком-->
+                
+                <!--Целостность групповой политики-->
+                <TargetObject name="T1484" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions\</TargetObject> <!--Внутренняя групповая политика использует архитектуру подключаемых модулей, в которой ничего не должно изменяться-->
+                
+                <!--Winsock и Winsock2-->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Services\WinSock</TargetObject> <!-- Подстановочный знак, включает Winsock и Winsock2-->
+                <TargetObject condition="end with">\ProxyServer</TargetObject> <!--Системный и пользовательский прокси-сервер-->
+               
+                <!--Поставщики учетных данных-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\Authentication\Credential Provider</TargetObject> <!--Подстановочный знак, включает поставщиков учетных данных и фильтры поставщиков учетных данных-->
+                <TargetObject name="T1101" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\</TargetObject> <!-- [ https://attack.mitre.org/wiki/Technique/T1131 ] [ https://attack.mitre.org/wiki/Technique/T1101 ] -->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders</TargetObject> <!--Изменения в WDigest-UseLogonCredential для удаления пароля-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Netsh</TargetObject> <!--вспомогательная библиотека DLL Netsh [ https://attack.mitre.org/wiki/Technique/T1128 ] -->
+                <TargetObject condition="contains">Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyEnable</TargetObject> <!--Вредоносное ПО часто отключает веб-прокси для загрузки на 2-м этапе-->
+                
+                <!--Сеть-->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order\</TargetObject> <!--Порядок сетевых провайдеров, которые проверяются для подключения к месту назначения-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles</TargetObject>
+                <TargetObject name="T1089" condition="end with">\EnableFirewall</TargetObject> <!--Отслеживайте отключение брандмауэра, все профили брандмауэра [ https://attack.mitre.org/wiki/Technique/T1089 ] -->
+                <TargetObject name="T1089" condition="end with">\DoNotAllowExceptions</TargetObject> <!--Отслеживайте отключение брандмауэра, все профили брандмауэра [ https://attack.mitre.org/wiki/Technique/T1089 ] -->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\AuthorizedApplications\List</TargetObject> <!--Приложения, авторизованные брандмауэром Windows для всех сетей-->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\AuthorizedApplications\List</TargetObject> <!--Приложения, авторизованные брандмауэром Windows для доменных сетей-->
+                
+                <!--Библиотеки DLL, которые вводятся в каждый процесс при запуске-->
+                <TargetObject name="T1103" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows\Appinit_Dlls\</TargetObject> <!--Функция отключена по умолчанию [ https://attack.mitre.org/wiki/Technique/T1103 ] -->
+                <TargetObject name="T1103" condition="begin with">HKLM\Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows\Appinit_Dlls\</TargetObject> <!--Функция отключена по умолчанию [ https://attack.mitre.org/wiki/Technique/T1103 ] -->
+                <TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCertDlls\</TargetObject>
+                
+                <!--Office-->
+                <TargetObject name="T1137" condition="contains">Microsoft\Office\Outlook\Addins\</TargetObject> <!--Надстройки Outlook, доступ к конфиденциальным данным и часто вызывающие проблемы-->
+                <TargetObject name="T1137" condition="contains">Office Test\</TargetObject> <!--Метод сохранения-->
+                <TargetObject name="Context,ProtectedModeExitOrMacrosUsed" condition="contains">Security\Trusted Documents\TrustRecords</TargetObject> <!--отслеживайте, когда используется "Включить редактирование" или "Включить макросы"-->
+                <TargetObject name="Context,ContactedDomain" condition="end with">\EnableBHO</TargetObject> <!--Контактные домены, хранящиеся здесь 'HKEY_CURRENT_USER\<SID>\SOFTWARE\Microsoft\Office\16.0\Common\Internet\Server Cache\<домен>\EnableBHO' -->
+               
+                <!--IE-->
+                <TargetObject name="T1176" condition="contains">Internet Explorer\Toolbar\</TargetObject> 
+                <TargetObject name="T1176" condition="contains">Internet Explorer\Extensions\</TargetObject> 
+                <TargetObject name="T1176" condition="contains">Browser Helper Objects\</TargetObject> 
+                <TargetObject condition="end with">\DisableSecuritySettingsCheck</TargetObject>
+                <TargetObject condition="end with">\3\1206</TargetObject> <!--Вредоносное ПО иногда гарантирует, что скрипты включены в зоне Интернета-->
+                <TargetObject condition="end with">\3\2500</TargetObject> <!--Вредоносное ПО иногда гарантирует, что скрипты включены в зоне Интернета-->
+                <TargetObject condition="end with">\3\1809</TargetObject> <!--Вредоносное ПО иногда гарантирует, что скрипты включены в зоне Интернета-->
+                
+                <!--Волшебные ключи реестра-->
+                <TargetObject condition="begin with">HKLM\Software\Classes\CLSID\{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}\</TargetObject> <!-- Автозапуск кэша миниатюр-->
+                <TargetObject condition="begin with">HKLM\Software\Classes\WOW6432Node\CLSID\{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}\</TargetObject> <!-- Автозапуск кэша миниатюр-->
+                <TargetObject condition="begin with">HKLM\Software\Classes\CLSID\{083863F1-70DE-11d0-BD40-00A0C911CE86}\</TargetObject> <!--экземпляры DirectX-->
+                <TargetObject condition="begin with">HKLM\Software\Classes\WOW6432Node\CLSID\{083863F1-70DE-11d0-BD40-00A0C911CE86}\</TargetObject> <!--экземпляры DirectX-->
+               
+                <!--Установка/запуск артефактов-->
+                <TargetObject condition="end with">\UrlUpdateInfo</TargetObject> <!--Исходный URL сохраняется в этом значении-->
+                <TargetObject condition="end with">\InstallSource</TargetObject> <!--Исходная папка для установки определенных программ и компонентов-->
+                <TargetObject name="Alert,Sysinternals Tool Used" condition="end with">\EulaAccepted</TargetObject> <!--Запущен инструмент Sysinternals. Множество полезных возможностей для злоумышленников-->
+               
+                <!--Вмешательство в работу антивируса-->
+                <TargetObject name="T1089,Tamper-Defender" condition="end with">\DisableAntiSpyware</TargetObject> <!--Windows:Защитник: Состояние изменено через реестр-->
+                <TargetObject name="T1089,Tamper-Defender" condition="end with">\DisableAntiVirus</TargetObject> <!--Windows:Защитник: Состояние изменено через реестр-->
+                <TargetObject name="T1089,Tamper-Defender" condition="end with">\SpynetReporting</TargetObject> <!--Windows:Защитник: Состояние изменено через реестр-->
+                <TargetObject name="T1089,Tamper-Defender" condition="end with">DisableRealtimeMonitoring</TargetObject> <!--Windows:Защитник: Состояние изменено через реестр-->
+                <TargetObject name="T1089,Tamper-Defender" condition="end with">\SubmitSamplesConsent</TargetObject> <!--Windows:Защитник: Состояние изменено через реестр-->
+                <TargetObject name="T1562,Tamper-Defender" condition="begin with">HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\</TargetObject> <!--Windows:Защитник: Исключения в ключе политики-->
+               
+                <!--Вмешательство в управление учетными записями Windows-->
+                <TargetObject name="T1088" condition="end with">HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System\EnableLUA</TargetObject> <!--Несанкционированный доступ к учетным записям пользователей-->
+                <TargetObject name="T1088" condition="end with">HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy</TargetObject> <!--Несанкционированный доступ к учетным записям пользователей-->
+              
+                <!--Взлом центра безопасности Microsoft -->
+                <TargetObject name="T1089,Tamper-SecCenter" condition="end with">HKLM\Software\Microsoft\Security Center\</TargetObject> <!-- [ https://attack.mitre.org/wiki/Technique/T1089 ]-->
+                <TargetObject name="T1089,Tamper-SecCenter" condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\HideSCAHealth</TargetObject> <!--Вредоносное ПО иногда отключает-->
+              
+                <!--Совместимость приложений Windows-->
+                <TargetObject name="T1138,AppCompatShim" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Custom</TargetObject> 
+                <TargetObject name="T1138,AppCompatShim" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB</TargetObject> <!--[ https://attack.mitre.org/wiki/Technique/T1138 ] -->
+                <TargetObject condition="contains">VirtualStore</TargetObject> <!--Виртуализация реестра, что-то не так, если она используется-->
+              
+                <!--Мониторинг целостности внутренних компонентов Windows-->
+                <TargetObject name="T1183,IFEO" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\</TargetObject> <!-- Вредоносным программам нравится изменять IFEO, например, добавлять отладчик для отключения антивирусного EXE-->
+                <TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\</TargetObject> <!--Целостность системы журнала событий и списки контроля доступа-->
+                <TargetObject name="Tamper-Safemode" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Safeboot\</TargetObject> <!--Службы одобрены для загрузки в безопасном режиме. Практически ничто не должно изменять это.-->
+                <TargetObject name="Tamper-Winlogon" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Winlogon\</TargetObject> <!--Поставщики, уведомленные WinLogon-->
+                <TargetObject name="Context,DeviceConnectedOrUpdated" condition="end with">\FriendlyName</TargetObject> <!--Новые устройства подключены и запомнены-->
+                <TargetObject name="Context,MsiInstallerStarted" condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\InProgress\(Default)</TargetObject> <!--Смотрите, когда запущен установщик Windows, полезно для сопоставления временной шкалы с другими событиями-->
+                <TargetObject name="Tamper-Tracing" condition="begin with">HKLM\Software\Microsoft\Tracing\RASAPI32</TargetObject> <!--Вредоносное ПО иногда отключает трассировку-->
+                <TargetObject name="Context,ProcessAccessedPrivateResource" condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\</TargetObject> <!--отслеживает, когда и какой процесс использует веб-камеру/микрофон/ местоположение и т.д. -->
+                <TargetObject condition="contains">\Keyboard Layout\Preload</TargetObject> <!--Раскладка клавиатуры загружена в пользовательский сеанс -->
+                <TargetObject condition="contains">\Keyboard Layout\Substitutes</TargetObject> <!--аскладка клавиатуры загружена в сеанс пользователя-->
+               
+                <!--События инвентаризации Windows-->
+                <TargetObject name="InvDB-Path" condition="end with">\LowerCaseLongPath</TargetObject> 
+                <TargetObject name="InvDB-Pub" condition="end with">\Publisher</TargetObject> 
+                <TargetObject name="InvDB-Ver" condition="end with">\BinProductVersion</TargetObject> 
+                <TargetObject name="InvDB-DriverVer" condition="end with">\DriverVersion</TargetObject>
+                <TargetObject name="InvDB-DriverVer" condition="end with">\DriverVerVersion</TargetObject>
+                <TargetObject name="InvDB-CompileTimeClaim" condition="end with">\LinkDate</TargetObject> 
+                <TargetObject name="InvDB" condition="contains">Compatibility Assistant\Store\</TargetObject> 
+                
+                <!--Подозрительные источники-->
+                <Image name="Suspicious,ImageBeginWithBackslash" condition="end with">regedit.exe</Image> <!--Пользователи и сотрудники справочной службы вносят изменения в систему -->
+                <Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image> <!--Устройства и VSC не должны выполнять изменение-->
+            </RegistryEvent>
+        </RuleGroup>
+
+	<RuleGroup name="" groupRelation="or">
+		<RegistryEvent onmatch="exclude">
+		<!--ПРИМЕЧАНИЕ: много шума можно устранить, исключив события Create Key, которые в основном безвредны-->
+			<TargetObject condition="contains">\{CAFEEFAC-</TargetObject>
+			<EventType condition="is">CreateKey</EventType>
+			<TargetObject condition="begin with">HKLM\COMPONENTS</TargetObject>
+			
+            <!--Инвентарный шум-->
+			<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\AppModel\StateRepository\Cache</TargetObject>
+			
+            <!--Misc-->
+			<TargetObject condition="end with">Toolbar\WebBrowser</TargetObject> <!--Microsoft:IE: Посторонняя активность-->
+			<TargetObject condition="end with">Browser\ITBar7Height</TargetObject> <!--Microsoft:IE: Посторонняя активность-->
+			<TargetObject condition="end with">Browser\ITBar7Layout</TargetObject> <!--Microsoft:IE: EПосторонняя активность-->
+			<TargetObject condition="end with">Internet Explorer\Toolbar\Locked</TargetObject> <!--Windows:Explorer: Посторонняя активность-->
+			<TargetObject condition="end with">Toolbar\WebBrowser\{47833539-D0C5-4125-9FA8-0819E2EAAC93}</TargetObject> <!--Windows:Explorer:Посторонняя активность-->
+			<TargetObject condition="end with">}\PreviousPolicyAreas</TargetObject> <!--Удалите шум из \Winlogon\GPExtensions с помощью svchost.exe-->
+			<TargetObject condition="contains">\Control\WMI\Autologger\</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">HKLM\SYSTEM\CurrentControlSet\Services\UsoSvc\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">\Lsa\OfflineJoin\CurrentValue</TargetObject> <!--Конфиденциальное значение при присоединении к домену-->
+			<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\</TargetObject> <!--Удалите установки мониторинга шума, запускаемые как системные-->
+			<TargetObject condition="contains">_Classes\AppX</TargetObject> <!--Удалить мониторинг шума "Shell\open\command"-->
+			<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\</TargetObject> <!--Низкий уровень шума-->
+			
+            <!--Шум управления загрузкой-->
+			<TargetObject condition="end with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\LsaPid</TargetObject> <!--lsass.exe : Шум при загрузке-->
+			<TargetObject condition="end with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\SspiCache</TargetObject> <!--lsass.exe : Шум при загрузке-->
+			<TargetObject condition="end with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Domains</TargetObject> <!--lsass.exe : Шум при загрузке--> 
+			
+            <!--Настройки запуска служб зашумлены, некоторые службы с низким уровнем риска регулярно меняют их, и это можно игнорировать-->
+			<TargetObject condition="end with">\Services\BITS\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">\services\clr_optimization_v2.0.50727_32\Start</TargetObject> <!--Microsoft:dotNet: Windows 7-->
+			<TargetObject condition="end with">\services\clr_optimization_v2.0.50727_64\Start</TargetObject> <!--Microsoft:dotNet: Windows 7-->
+			<TargetObject condition="end with">\services\clr_optimization_v4.0.30319_32\Start</TargetObject> <!--Microsoft:dotNet: Windows 10-->
+			<TargetObject condition="end with">\services\clr_optimization_v4.0.30319_64\Start</TargetObject> <!--Microsoft:dotNet: Windows 10-->
+			<TargetObject condition="end with">\services\deviceAssociationService\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">\services\fhsvc\Start</TargetObject> <!--Служба истории файлов-->
+			<TargetObject condition="end with">\services\nal\Start</TargetObject> <!--Intel: Диагностический драйвер сетевого адаптера-->
+			<TargetObject condition="end with">\services\trustedInstaller\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">\services\tunnel\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+			<TargetObject condition="end with">\services\usoSvc\Start</TargetObject> <!--Удалите шум из мониторинга "\Start"-->
+		
+        	<!--Фильтрация шумов файловых текстов-->
+			<TargetObject condition="end with">\UserChoice\ProgId</TargetObject> <!--Удалите шум из мониторинга "файловых текстов"--> <!--Win8+-->
+			<TargetObject condition="end with">\UserChoice\Hash</TargetObject> <!--Удалите шум из мониторинга "файловых текстов"--> <!--Win8+-->
+			<TargetObject condition="end with">\OpenWithList\MRUList</TargetObject> <!--Удалите шум из мониторинга "файловых текстов"-->
+			<TargetObject condition="contains">Shell Extentions\Cached</TargetObject> <!--Удаляет шум, генерируемый explorer.exe на отслеживаемых двоичных ключах ShellCached--> <!--Win8+-->
+			
+            <!--Шум групповой политики-->
+			<TargetObject condition="end with">HKLM\System\CurrentControlSet\Control\Lsa\Audit\SpecialGroups</TargetObject> <!-- Обычно устанавливается с помощью групповой политики, не особенно важно входить в систему-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup\0\PSScriptOrder</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup\0\SOM-ID</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup\0\GPO-ID</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup\0\0\IsPowershell</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Startup\0\0\ExecTime</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown\0\PSScriptOrder</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown\0\SOM-ID</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown\0\GPO-ID</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown\0\0\IsPowershell</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="end with">SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Shutdown\0\0\ExecTime</TargetObject> <!--шум ниже фактического ключа при построении-->
+			<TargetObject condition="contains">\safer\codeidentifiers\0\HASHES\{</TargetObject> <!--Политики ограничения программного обеспечения. Может использоваться для отключения средств безопасности, но при его использовании очень шумно отслеживать-->
+			
+            <!--Офис C2R-->
+			<TargetObject condition="contains">VirtualStore\MACHINE\SOFTWARE\Microsoft\Office\ClickToRun\</TargetObject> <!--SearchProtocolHost записывает данные в реестр Office C2R для Outlook, по-видимому, в отношении индексации почты-->
+			<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Office\ClickToRun\</TargetObject> <!-- Виртуальный реестр для Office-->
+			
+            <!--третья сторона-->
+			<Image condition="is">C:\Program Files\WIDCOMM\Bluetooth Software\btwdins.exe</Image> <!--Постоянно пишет в HKLM-->
+			<TargetObject condition="begin with">HKCR\VLC.</TargetObject> <!--Шум при обновлении VLC-->
+
+            <!--WINEVT publishers noise-->
+			<TargetObject condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{945a8954-c147-4acd-923f-40c45405a658}</TargetObject> <!--Windows обновления-->
+		</RegistryEvent>
+	</RuleGroup>
+
+
+        <!--SYSMON EVENT ID 15 : СОЗДАН АЛЬТЕРНАТИВНЫЙ ПОТОК ДАННЫХ [FileCreateStreamHash]-->
+
+        <RuleGroup name="" groupRelation="or">
+
+        
+            <FileCreateStreamHash onmatch="exclude">
+            </FileCreateStreamHash>
+            
+
+            <FileCreateStreamHash onmatch="include">
+                <TargetFilename condition="contains">Downloads</TargetFilename> <!--Загруженные файлы. Не включает файлы "Запуска" в IE-->
+                <TargetFilename condition="contains">Temp\7z</TargetFilename> <!--извлечений из zip-файла-->
+                <TargetFilename condition="contains">Startup</TargetFilename> <!--Запуск рекламы-->
+                <TargetFilename condition="end with">.bat</TargetFilename> <!--Пакетный скриптинг-->
+                <TargetFilename condition="end with">.cmd</TargetFilename> <!--Пакетный скриптинг-->
+                <TargetFilename condition="end with">.doc</TargetFilename> <!--office doc потенциально с макросом-->
+                <TargetFilename condition="end with">.docm</TargetFilename> <!--office docm потенциально с макросом-->
+                <TargetFilename condition="end with">.hta</TargetFilename> <!--Scripting-->
+                <TargetFilename condition="end with">.jse</TargetFilename> <!--Файл реестра-->
+                <TargetFilename condition="end with">.lnk</TargetFilename> <!--Файл быстрого доступа-->
+                <TargetFilename condition="end with">.ppt</TargetFilename> <!--Office doc потенциально с макросами-->
+                <TargetFilename condition="end with">.ps1</TargetFilename> <!--PowerShell-->
+                <TargetFilename condition="end with">.ps2</TargetFilename> <!--PowerShell-->
+                <TargetFilename condition="end with">.reg</TargetFilename> <!--Файл реестра-->
+                <TargetFilename condition="end with">.sct</TargetFilename> <!--Scripting-->
+                <TargetFilename condition="end with">.vb</TargetFilename> <!--Файлы сценариев Visual Basic-->
+                <TargetFilename condition="end with">.vbe</TargetFilename> <!--Файлы сценариев Visual Basic-->
+                <TargetFilename condition="end with">.vbs</TargetFilename> <!--Файлы сценариев Visual Basic-->
+                <TargetFilename condition="end with">.wsc</TargetFilename> <!--Scripting-->
+                <TargetFilename condition="end with">.wsf</TargetFilename> <!--Scripting-->
+                <TargetFilename condition="end with">.py</TargetFilename> <!--Python-->
+            </FileCreateStreamHash>
+        </RuleGroup>
+
+
+        <!--SYSMON EVENT ID 16 : ИЗМЕНЕНИЕ КОНФИГУРАЦИИ SYSMON-->
+
+        <!--SYSMON EVENT ID 17 & 18 : СОЗДАН КАНАЛ / СОЕДИНИТЕЛЬ КАНАЛА [PipeEvent]-->
+
+        <RuleGroup name="" groupRelation="or">
+			<PipeEvent onmatch="include">
+				<!-- Средства удаленного выполнения команд -->
+				<PipeName condition="contains any">paexec;remcom;csexec</PipeName>
+				<!-- Устройства для сброса паролей или учетных данных -->
+				<PipeName condition="contains any">\lsadump;\cachedump;\wceservicepipe</PipeName>
+				<!-- Вредоносная программа -->
+				<PipeName condition="contains any">\isapi_http;\isapi_dg;\isapi_dg2;\sdlrpc;\ahexec;\winsession;\lsassw;\46a676ab7f179e511e30dd2dc41bd388;\9f81f59bc58452127884ce513865ed20;\e710f28d59aa529d6792ca6ff0ca1b34;\rpchlp_3;\NamePipe_MoreWindows;\pcheap_reuse;\gruntsvc;\583da945-62af-10e8-4902-a8f205c72b2e;\bizkaz;\svcctl;\Posh;\jaccdpqnvbrrxlaf;\csexecsvc</PipeName>
+				<PipeName condition="contains any">\atctl;\userpipe;\iehelper;\sdlrpc;\comnap</PipeName>
+				<!-- Cobalt Strike Pipe Names -->
+				<PipeName condition="contains all">MSSE-;-server</PipeName>
+				<PipeName condition="begin with">\postex_</PipeName>
+				<PipeName condition="begin with">\postex_ssh_</PipeName>
+				<PipeName condition="begin with">\status_</PipeName>
+				<PipeName condition="begin with">\msagent_</PipeName>
+			</PipeEvent>
+		</RuleGroup>
+
+        <!--SYSMON EVENT ID 19 & 20 & 21 : МОНИТОРИНГ СОБЫТИЙ WMI [WmiEvent]-->
+
+        <RuleGroup name="" groupRelation="or">
+            <WmiEvent onmatch="exclude">
+                <!--NOTE: Using exclude with no rules means everything will be logged-->
+            </WmiEvent>
+	    </RuleGroup>
+
+        <!--SYSMON EVENT ID 22 : DNS QUERY [DnsQuery]-->
+        
+
+        <!--SYSMON EVENT ID 23 : FILE DELETE [FileDelete]-->
+
+        <!--SYSMON EVENT ID 24 : МОНИТОРИНГ СОБЫТИЙ В БУФЕРЕ ОБМЕНА [ClipboardChange]-->
+        <RuleGroup name="" groupRelation="or">
+            <ClipboardChange onmatch="include">
+                <Image condition="end with">wscript.exe</Image>
+                <Image condition="end with">cscript.exe</Image>
+                <Image condition="end with">powershell.exe</Image>
+                <Image condition="end with">rdpclip.exe</Image>
+            </ClipboardChange>
+        </RuleGroup>
+
+
+        <!--SYSMON EVENT ID 25 : PROCESS TAMPERING [ProcessTampering]-->
+
+        <!--SYSMON EVENT ID 255 : ERROR-->
+
+    </EventFiltering>
+</Sysmon>
